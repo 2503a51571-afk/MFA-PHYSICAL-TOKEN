@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f5f0">
+  <title>SecureKey | Virtual MFA Simulator</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <style>
+    [hidden] { display: none !important; }
+    .token-form {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,.65);
+      border: 1px solid #e5dffd;
+      border-radius: 15px;
+      text-align: left;
+    }
+    .token-form label {
+      display: block;
+      margin: 12px 0 6px;
+    }
+    .token-form input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .token-form button {
+      margin-top: 15px;
+      width: 100%;
+    }
+    .token-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .token-actions button { flex: 1; }
+    .token-code {
+      font-size: 30px !important;
+      letter-spacing: 6px;
+      overflow-wrap: anywhere;
+    }
+    .token-hint {
+      font-size: 12px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<main class="layout">
+
+  <section class="hero">
+    <div class="brand">
+      <div class="brand-icon">✦</div>
+      <span>SecureKey</span>
+    </div>
+
+    <div class="hero-badge">AWS CLOUD AUTHENTICATION</div>
+
+<h1>
+  A more considered<br>
+  way to <em>verify.</em>
+</h1>
+
+<p>
+  SecureKey demonstrates two-step authentication
+  through password verification and a personal
+  virtual security token, powered by AWS.
+</p>
+
+      <div class="token-art">
+        <div class="token-device">
+          <div class="device-top">
+            <span>SECUREKEY</span>
+            <span class="device-light"></span>
+          </div>
+
+          <div class="device-screen">
+            <span>VIRTUAL TOKEN</span>
+            <strong>••••••</strong>
+            <small>ONE-TIME PASSWORD</small>
+          </div>
+
+          <div class="device-button">✦</div>
+          <small>SOFTWARE SECURITY TOKEN</small>
+        </div>
+
+        <span class="floating-star star-one">✧</span>
+        <span class="floating-star star-two">✦</span>
+      </div>
+    </div>
+
+  <div class="hero-footer">
+  <span>Password authentication</span>
+  <span>One-time verification</span>
+  <span>AWS cloud infrastructure</span>
+</div>
+  </section>
+
+  <section class="auth-area">
+    <div class="auth-card">
+
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        AWS Authentication System
+      </div>
+
+      <section id="loginPage" class="page active">
+        <div class="page-icon">🔐</div>
+        <h2>Welcome back!</h2>
+        <p class="subtitle">Sign in to your secure account.</p>
+
+        <form id="loginForm">
+          <label for="loginUsername">Username</label>
+          <input
+            id="loginUsername"
+            type="text"
+            placeholder="Enter your username"
+            autocomplete="username"
+            required
+          >
+
+          <label for="loginPassword">Password</label>
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+
+          <button class="primary-btn" type="submit">
+            Continue securely →
+          </button>
+        </form>
+
+        <p class="switch-text">
+          Don't have an account?
+          <button
+            type="button"
+            class="text-btn"
+            data-page="registerPage"
+          >
+            Create account
+          </button>
+        </p>
+      </section>
+
+      <section id="registerPage" class="page">
+        <div class="page-icon">🌸</div>
+        <h2>Create an account</h2>
+        <p class="subtitle">
+          Start your secure journey with SecureKey.
+        </p>
+
+        <form id="registerForm">
+          <label for="registerUsername">Username</label>
+          <input
+            id="registerUsername"
+            type="text"
+            placeholder="Choose a username"
+            minlength="3"
+            maxlength="30"
+            pattern="[a-zA-Z0-9_]{3,30}"
+            autocomplete="username"
+            required
+          >
+
+          <label for="registerPassword">Password</label>
+          <input
+            id="registerPassword"
+            type="password"
+            placeholder="At least 12 characters"
+            minlength="12"
+            maxlength="128"
+            autocomplete="new-password"
+            required
+          >
+
+          <label for="confirmPassword">Confirm password</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Re-enter your password"
+            autocomplete="new-password"
+            required
+          >
+
+          <button class="primary-btn" type="submit">
+            Create account →
+          </button>
+        </form>
+
+        <p class="switch-text">
+          Already registered?
+          <button
+            type="button"
+            class="text-btn"
+            data-page="loginPage"
+          >
+            Sign in
+          </button>
+        </p>
+      </section>
+
+      <section id="otpPage" class="page">
+        <div class="page-icon">🛡️</div>
+        <h2>Verify it's you</h2>
+
+        <p class="subtitle">
+          Generate a six-digit OTP using your SecureKey
+          Virtual Security Token, then enter it below.
+        </p>
+
+        <div class="otp-info">
+          <span>✦ Second authentication step</span>
+          <span id="otpTimer">05:00</span>
+        </div>
+
+        <form id="otpForm">
+          <label for="otpInput">One-time password</label>
+          <input
+            id="otpInput"
+            class="otp-input"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]{6}"
+            maxlength="6"
+            placeholder="000000"
+            autocomplete="one-time-code"
+            required
+          >
+
+          <button class="primary-btn" type="submit">
+            Verify OTP →
+          </button>
+        </form>
+
+        <div class="virtual-token">
+          <h3>🔐 Virtual Security Token</h3>
+
+          <p id="tokenInstructions">
+            Set up your Virtual Token or generate
+            an OTP using your personal token PIN.
+          </p>
+
+          <div id="setupIntro" hidden>
+            <p>
+              <strong>First-time setup</strong>
+            </p>
+            <p>
+              Create a separate Virtual Token PIN.
+              You only need to do this once.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            id="virtualTokenBtn"
+            class="secondary-btn"
+          >
+            ✦ Open Virtual Token
+          </button>
+
+          <form id="tokenSetupForm" class="token-form" hidden>
+            <h3>✦ Set Up Virtual Token</h3>
+
+            <label for="setupPassword">
+              SecureKey login password
+            </label>
+            <input
+              id="setupPassword"
+              type="password"
+              autocomplete="off"
+              placeholder="Enter your account password"
+              required
+            >
+
+            <label for="setupPin">
+              Create Virtual Token PIN
+            </label>
+            <input
+              id="setupPin"
+              type="password"
+              minlength="8"
+              maxlength="128"
+              autocomplete="off"
+              placeholder="At least 8 characters"
+              required
+            >
+
+            <label for="confirmPin">
+              Confirm Virtual Token PIN
+            </label>
+            <input
+              id="confirmPin"
+              type="password"
+              minlength="8"
+              maxlength="128"
+              autocomplete="off"
+              placeholder="Re-enter your PIN"
+              required
+            >
+
+            <button class="primary-btn" type="submit">
+              Set Up My Token →
+            </button>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              id="cancelSetupBtn"
+            >
+              Cancel
+            </button>
+          </form>
+
+          <form id="tokenGenerateForm" class="token-form" hidden>
+            <h3>✦ Generate Virtual OTP</h3>
+
+            <label for="generatePin">
+              Virtual Token PIN
+            </label>
+            <input
+              id="generatePin"
+              type="password"
+              autocomplete="off"
+              placeholder="Enter your token PIN"
+              required
+            >
+
+            <button class="primary-btn" type="submit">
+              Generate OTP →
+            </button>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              id="cancelGenerateBtn"
+            >
+              Cancel
+            </button>
+          </form>
+
+          <div id="virtualTokenInfo" hidden>
+            <p>Your OTP for this login:</p>
+
+            <div class="device-screen" style="margin-top:15px">
+              <span>YOUR ONE-TIME PASSWORD</span>
+              <strong
+                id="challengeDisplay"
+                class="token-code"
+                aria-live="polite"
+              >••••••</strong>
+              <small>
+                Enter this code above before it expires.
+              </small>
+            </div>
+          </div>
+
+          <p class="token-hint">
+            Each OTP belongs to one login challenge,
+            expires after five minutes, and cannot
+            be reused after successful verification.
+          </p>
+        </div>
+
+        <p class="help-text">
+          New users set up a separate token PIN.
+          Returning users enter their existing PIN
+          to generate a fresh OTP.
+        </p>
+
+        <button
+          type="button"
+          class="secondary-btn"
+          data-page="loginPage"
+        >
+          ← Back to login
+        </button>
+      </section>
+
+      <section id="dashboardPage" class="page">
+        <div class="page-icon success-icon">✓</div>
+        <h2>Verification successful!</h2>
+
+        <p class="subtitle">
+          Your password and Virtual Token OTP
+          have been verified successfully.
+        </p>
+
+        <div class="success-panel">
+          <div class="success-row">
+            <span>Username</span>
+            <strong id="dashboardUsername">User</strong>
+          </div>
+
+          <div class="success-row">
+            <span>Password</span>
+            <strong>✓ Verified</strong>
+          </div>
+
+          <div class="success-row">
+            <span>Virtual Token OTP</span>
+            <strong>✓ Verified</strong>
+          </div>
+
+          <div class="success-row">
+            <span>Authentication</span>
+            <strong>✓ Successful</strong>
+          </div>
+
+          <div class="success-row">
+            <span>Session</span>
+            <strong id="sessionStatus">Active</strong>
+          </div>
+        </div>
+
+        <div class="demo-notice">
+          This is a software-based MFA demonstration.
+          The virtual token uses a separate PIN,
+          but runs in the same browser as login.
+          Protected backend resources require
+          server-side session validation.
+        </div>
+
+        <button
+          type="button"
+          id="logoutBtn"
+          class="primary-btn"
+        >
+          Sign out →
+        </button>
+      </section>
+
+      <div
+        id="message"
+        class="message"
+        role="alert"
+        aria-live="polite"
+      ></div>
+    </div>
+
+    <div class="bottom-note">
+      <span>✦ Powered by AWS Lambda</span>
+      <span>•</span>
+      <span>API Gateway</span>
+      <span>•</span>
+      <span>DynamoDB</span>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
